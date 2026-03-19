@@ -1,0 +1,8 @@
+from pop import Sound, delay
+sound = Sound()
+while True:
+    for _ in range(100):
+        value = sound.read()
+        if value > 2100:
+            print(value)
+    delay(100)
