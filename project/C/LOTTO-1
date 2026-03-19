@@ -1,0 +1,16 @@
+import random
+count = 6
+array = [i for i in range(1, 46)]
+key = int(input("금액을 적어주세요(최소 5000원 ~ 10만원까지) : "))
+
+if (5000 <= key <= 100000) or (key == 1000000):
+    set = key//1000
+    for number in range(1, set+1):
+        set = random.sample(array, count)
+        set.sort()
+        print(set)
+        if number % 5 == 0 :
+            print("-"*30)
+
+else:
+    print("다시 입력해주세요")
