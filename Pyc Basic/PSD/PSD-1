@@ -1,0 +1,11 @@
+from pop import Psd, delay, Leds
+
+psd = Psd()
+led = Leds()
+while True:
+    value = psd.readAverage()
+    distance = psd.calcDist(value)
+    if distance < 30:
+        led.allON()
+    else :
+        led.allOFF()
