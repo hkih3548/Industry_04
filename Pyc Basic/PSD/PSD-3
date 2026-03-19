@@ -1,0 +1,7 @@
+from pop import PSd, delay
+psd = Psd()
+while True:
+    value= psd.readAverage()   #이동평균핗터 (moving average)
+    distance = psd.calcDist(value)
+    print(f'distance : {distance} cm')
+    delay(500)
