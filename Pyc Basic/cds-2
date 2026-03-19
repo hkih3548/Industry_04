@@ -1,0 +1,11 @@
+from pop import Cds, delay, Leds
+cds = Cds()
+led = Leds()
+while True:
+    value = cds.read()
+    print(f"cds analog value : {value}")
+    if value < 100:
+        led.allOn()
+    else:
+        led.allOff()
+    delay(1000)
