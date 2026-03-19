@@ -1,0 +1,23 @@
+from pop import Sound, delay, Leds
+led = Leds()
+sound = Sound()
+led.allOff()
+clapper_list = list()
+clapper_count = 0
+led_all_state = False
+while True:
+    for _ in range(100):
+        value = sound.read()
+        if value > 2100:
+            clapper_count += 1
+            if clapper_count ==3:
+                led_all_state = led_all_state ^ True
+                clapper_list.append(value)
+                print(value)
+    if led_all_state:
+        led.allOn()
+    else:
+        led.allOff()
+    clapper_count = 0
+    clapper_list.clear()
+    delay(100)
