@@ -1,0 +1,24 @@
+import random
+
+key = int(input("금액을 적어주세요(최소 5000원 ~ 10만원까지) : "))
+
+if (5000 <= key <= 100000) or (key == 1000000):
+    total_games = key // 1000
+    print(f"\n총 {total_games}게임을 생성합니다.\n" + "=" * 30)
+
+    for i in range(1, total_games + 1):
+        lotto_numbers = set()
+
+        while len(lotto_numbers) < 6:
+            num = random.randint(1, 45)
+            lotto_numbers.add(num)
+
+        sorted_lotto = sorted(list(lotto_numbers))
+
+        print(f"[{i:02d}회차] {sorted_lotto}")
+
+        if i % 5 == 0:
+            print("-" * 30)
+
+else:
+    print("금액 범위를 다시 확인해주세요. (5,000원 ~ 100,000원)")
