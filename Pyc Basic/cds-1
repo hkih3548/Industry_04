@@ -1,0 +1,17 @@
+from pop import Cds, delay, Leds
+
+cds = Cds()
+led = Leds()
+
+while True:
+    value = cds.read()
+    print(f"cds analog value : {value}")
+    
+    count = max(0, 8 - (value // 350))
+    
+    for i in range(count):
+        led[i].on()
+    if value > 3100:
+        led.allOff()
+            
+    delay(1000)
