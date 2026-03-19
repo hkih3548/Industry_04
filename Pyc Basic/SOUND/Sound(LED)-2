@@ -1,0 +1,18 @@
+from pop import Sound, delay, Leds
+led = Leds()
+sound = Sound()
+count=0
+while True:
+    for _ in range(100):
+        value = sound.read()
+        if value > 2100:
+            count += 1
+            print(count)
+            if count % 2 == 1:
+                led.allOn()
+                print(value)
+            else:
+                led.allOff()
+                print(value)
+            delay(50)
+        delay(50)
