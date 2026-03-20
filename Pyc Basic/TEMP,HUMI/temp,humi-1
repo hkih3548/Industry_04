@@ -1,16 +1,20 @@
 from pop import Sht20, delay
 sht = Sht20() # SHT20 온도/습도 센서를 사용
 count = 0
-with open("Temperature_Humidity.csv", 'w', encoding = 'utf-8') as f:
-    f.write("온도" + ", " + "습도" + "\r\n")
-    while True:
-        count += 1
-        temperature = sht.readTemp() #온도를 읽어 온다.
-        humidity = sht.readHumi() # 습도를 읽어 온다.
-        print(f"온도 : {temperature:.2f}")
-        print(f"습도 : {humidity:.2f}")
+is_file_closed = False
+f = open("Temperature_Humidity.csv", 'w', encoding = 'utf-8')
+f.write("온도" + ", " + "습도" + "\r\n")
+while True:
+    count += 1
+    temperature = sht.readTemp() #온도를 읽어 온다.
+    humidity = sht.readHumi() # 습도를 읽어 온다.
+    print(f"온도 : {temperature:.2f}")
+    print(f"습도 : {humidity:.2f}")
+    if count > 5:
+        print("저장 종료")
+        f.close()
+        is_file_closed = True
+    if not is_file_closed:
         f.write(f"{temperature:.2f}" + ", ")
         f.write(f'{humidity:.2f}' + "\r\n")
-        if count > 10:
-            f.close()
-        delay(100)
+    delay(100)
