@@ -1,0 +1,6 @@
+from pop import PiezoBuzzer, delay
+piezo = PiezoBuzzer()
+piezo.setTempo(120)
+while True:
+    piezo.tone(4, 6, 8)
+    delay(10)
