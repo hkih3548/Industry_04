@@ -1,0 +1,19 @@
+#가변저항 돌리면 LED 켜지고 최대까지 올리면 부저가 울린다.
+from pop import Potentiometer, delay, Leds, PiezoBuzzer
+potrn = Potentiometer()
+led = Leds()
+p = PiezoBuzzer()
+while True:
+    value = potrn.readVolt()
+    count = max(0, 8 - (value // 0.41))
+    print(value)
+    for i in range(8):
+        if 8 - count > i:
+            led[i].on()
+        elif value > 3.2:
+            p.setTempo(120)
+            p.tone(5, 5, 3)
+            delay(300)
+        else:
+            led[i].off()
+        delay(100)
