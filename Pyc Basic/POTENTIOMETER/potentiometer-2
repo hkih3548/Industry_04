@@ -1,0 +1,15 @@
+from pop import Potentiometer, delay, Leds
+potrn = Potentiometer() 
+led = Leds()
+
+while True:
+    value = potrn.readVolt()
+    count = max(0, 8 - (value // 0.41))
+    print(value)
+    for i in range(8):
+        if 8 - count > i:
+            led[i].on()
+        else:
+            led[i].off()
+        
+    delay(100)
