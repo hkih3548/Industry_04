@@ -1,0 +1,37 @@
+from pop import PiezoBuzzer, delay
+
+piezo = PiezoBuzzer()
+piezo.setTempo(120)
+
+while True:
+    # 1절 - 학교종이 땡땡땡 어서모이자
+    piezo.tone(5, 5, 4)   # 학 (솔)
+    piezo.tone(5, 5, 4)   # 교 (솔)
+    piezo.tone(6, 6, 4)   # 종 (라)
+    piezo.tone(6, 6, 4)   # 이 (라)
+    piezo.tone(5, 5, 4)   # 땡 (솔)
+    piezo.tone(5, 5, 4)   # 땡 (솔)
+    piezo.tone(3, 4, 8)   # 땡 (미, 2박)
+    delay(400)
+    piezo.tone(5, 5, 4)   # 어 (솔)
+    piezo.tone(5, 5, 4)   # 서 (솔)
+    piezo.tone(3, 3, 4)   # 모 (미)
+    piezo.tone(3, 3, 4)   # 이 (미)
+    piezo.tone(2, 2, 8)   # 자 (레, 2박)
+    delay(400)
+    # 2절 - 선생님이 우리를 기다리신다
+    piezo.tone(5, 5, 4)   # 선 (솔)
+    piezo.tone(5, 5, 4)   # 생 (솔)
+    piezo.tone(6, 6, 4)   # 님 (라)
+    piezo.tone(6, 6, 4)   # 이 (라)
+    piezo.tone(5, 5, 4)   # 우 (솔)
+    piezo.tone(5, 5, 4)   # 리 (솔)
+    piezo.tone(3, 3, 8)   # 를 (미, 2박)
+    delay(400)
+    piezo.tone(5, 5, 4)   # 기 (솔)
+    piezo.tone(3, 3, 4)   # 다 (미)
+    piezo.tone(2, 2, 4)   # 리 (레)
+    piezo.tone(3, 3, 4)   # 신 (미)
+    piezo.tone(1, 1, 12)  # 다 (도, 3박)
+
+    delay(1000)
