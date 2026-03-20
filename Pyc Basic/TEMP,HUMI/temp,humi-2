@@ -1,0 +1,18 @@
+from pop import Sht20, delay, Leds
+led = Leds()
+sht = Sht20()
+
+while True:
+    te = sht.readTemp()
+    hu = sht.readHumi()
+    print(f"온도 : {te:.2f}" + ", " f"습도 : {hu:.2f}")
+    if te > 29.00:
+        led[1].on()
+    else:
+        led[1].off()
+        
+    if hu > 34.00:
+        led[3].on()
+    else:
+        led[3].off()
+    delay(1000)
