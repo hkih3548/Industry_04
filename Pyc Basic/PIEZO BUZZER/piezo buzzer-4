@@ -1,0 +1,12 @@
+from pop import PiezoBuzzer, delay, Potentiometer
+pm = Potentiometer()
+pz = PiezoBuzzer()
+pz.setTempo(120)
+weight = 0.1
+
+while True:
+    value = pm.read()
+    value = weight * value
+    pz.tone(3, int(value),4)
+    delay(10)
+    print(value)
