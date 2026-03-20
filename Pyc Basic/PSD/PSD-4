@@ -1,0 +1,25 @@
+#거리에 따라 부저가 울린다.
+from pop import PiezoBuzzer, delay, Psd
+p = PiezoBuzzer()
+psd = Psd()
+
+while True:
+    value = psd.read()
+    distance = psd.calcDist(value)
+    
+    print(f"현재 거리: {distance} mm")
+    
+    if distance < 10:
+        p.setTempo(50)
+        p.tone(6, 5, 1)
+        delay(100)
+    elif 10 <= distance < 30:
+        p.setTempo(200)
+        p.tone(6, 5, 1)
+        delay(250)
+    elif 30 <= distance <= 130 :
+        p.setTempo(400)
+        p.tone(6, 5, 1)
+        delay(1500)
+    else:  
+        delay(300)
