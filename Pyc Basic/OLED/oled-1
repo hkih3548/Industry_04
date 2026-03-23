@@ -1,0 +1,5 @@
+from pop import Oled, delay
+oled = Oled() # 클래스 생성자
+oled.init() # 초기화
+oled.print("\nHello world\n")
+oled.print("Hong ki ho")
