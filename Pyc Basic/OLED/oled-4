@@ -1,0 +1,9 @@
+from pop import Oled, delay
+display = Oled()
+while True:
+    display.fillCircle(60, 30, 10, display.WHITE)
+    display.display()
+    delay(1000)
+    display.fillCircle(60, 30, 10, display.BLACK)
+    display.display()
+    delay(1000)
