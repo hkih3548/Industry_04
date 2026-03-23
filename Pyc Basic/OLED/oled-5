@@ -1,0 +1,33 @@
+from pop import Oled, delay, Switches
+switch = Switches()
+display = Oled()
+display.init()
+state = 0
+
+while True:
+    btn_state1 = switch[0].read()
+    btn_state2 = switch[1].read()
+    if not btn_state1:
+        state += 1
+        if state > 8:
+            state = 0
+        display.clearDisplay()
+        if state == 1:
+            display.drawTriangle(64, 15, 44, 49, 84, 49, display.WHITE)
+        elif state == 2:
+            display.fillTriangle(64, 15, 44, 49, 84, 49, display.WHITE)
+        elif state == 3:
+            display.drawTriangle(83, 51, 83, 13, 45, 32, display.WHITE)
+        elif state == 4:
+            display.fillTriangle(83, 13, 45, 32, 83, 51, display.WHITE)
+        elif state == 5:
+            display.drawTriangle(44, 15, 85, 15, 64, 49, display.WHITE)
+        elif state == 6:
+            display.fillTriangle(44, 15, 85, 15, 64, 49, display.WHITE)
+        elif state == 7:
+            display.drawTriangle(45, 51, 45, 13, 83, 32, display.WHITE)
+        elif state == 8:
+            display.fillTriangle(45, 13, 83, 32, 45, 51, display.WHITE)
+            
+        display.display()
+        delay(300)
