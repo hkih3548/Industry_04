@@ -1,0 +1,548 @@
+#define _CRT_SECURE_NO_WARNINGS 
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif					//6~10 화면 지우기 용 코드
+
+int page1() //아이디와 비밀번호
+{
+	char saveID[] = "qwer1";	//아이디
+	char savePW[] = "qwer2";	//비밀번호
+	char inputID[20];
+	char inputPW[20];
+	int count = 0;				//로그인 실패 횟수
+
+	while (count < 3)
+	{
+		printf("아이디 : ");
+		scanf("%19s", inputID);
+
+		printf("비밀번호 : ");
+		scanf("%19s", inputPW);
+
+
+		if (strcmp(inputID, saveID) == 0 && strcmp(inputPW, savePW) == 0)
+		{
+			printf("\n로그인 되었습니다.\n");
+			return 1;
+		}
+		count++;
+		printf("\n로그인 실패(누적 %d회)\n", count);
+		printf("\n");
+
+	}
+	printf("\n3회 로그인 실패했습니다.\n");
+	return 0;
+
+}
+void page1_1()
+{
+	printf("\n");
+	for (int i = 0; i < 38; i++)
+	{
+		printf("=");
+	}
+	printf("\n");
+}
+
+int page2()  // 메뉴
+{
+	int menu;
+	int total = 0;
+	int menu_choice;
+	int rice_count = 0;
+	int soup_count = 0;
+	int birthdate;
+	int side_dish_ckeck[10] = { 0 };
+
+	int rice_qty[6] = { 0 };
+	int soup_qty[6] = { 0 };
+	int side_qty[10] = { 0 };
+	int drink_qty[8] = { 0 };
+
+	char* rice_names[] = { "", "오므라이스", "백반", "볶음밥", "카레라이스", "비빔밥" };
+	char* soup_names[] = { "", "미역국", "황태국", "된장국", "소고기무국", "시래기국" };
+	char* side_names[] = { "", "돈까스", "멧돼지고기", "두루치기", "수육", "소고기", "달걀프라이", "오징어", "콩나물", "김치" };
+	char* drink_names[] = { "", "사케", "생맥주", "하이볼", "소주", "카스", "하이트", "소맥" };
+
+
+	while (1)
+	{
+		system(CLEAR);
+		printf("\n======================================\n");
+		printf("\n카테고리를 선택해주세요.\n");
+		puts("1. 밥\n2. 국\n3. 반찬\n4. 술\n0. 주문 종료 및 결제");
+		printf("선택 : [    ]\b\b\b\b");
+
+		if (scanf("%d", &menu) != 1) {
+			while (getchar() != '\n');
+			continue;
+		}
+		if (menu == 0) {
+			system(CLEAR);
+			printf("\n=========[장바구니 내역]=========\n");
+			if (total == 0) {
+				printf("주문한 내역이 없습니다.");
+			}
+			else {
+				for (int i = 1; i <= 5; i++) if (rice_qty[i] > 0) printf("%s x %d\n", rice_names[i], rice_qty[i]);
+				for (int i = 1; i <= 5; i++) if (soup_qty[i] > 0) printf("%s x %d\n", soup_names[i], soup_qty[i]);
+				for (int i = 1; i <= 9; i++) if (side_qty[i] > 0) printf("%s x %d\n", side_names[i], side_qty[i]);
+				for (int i = 1; i <= 7; i++) if (drink_qty[i] > 0) printf("%s x %d\n", drink_names[i], drink_qty[i]);
+			}
+			printf("현재 합계: %d원\n", total);
+			printf("======================================\n");
+			printf("주문하시겠습니까? (1. 확인 / 2. 취소(초기화)): ");
+
+			int confirm;
+			scanf("%d", &confirm);
+			if (confirm == 1) {
+				if (total == 0) continue;
+				break; // 루프 탈출 -> 최종 결제 진행
+			}
+			else {
+				printf("\n주문을 취소하고 초기화합니다.\n");
+				total = 0;
+				for (int i = 0; i < 6; i++) { rice_qty[i] = 0; soup_qty[i] = 0; }
+				for (int i = 0; i < 10; i++) side_qty[i] = 0;
+				for (int i = 0; i < 8; i++) drink_qty[i] = 0;
+				continue; // 다시 처음 메뉴로
+			}
+		}
+
+		switch (menu) {
+		case 1:
+			while (1) {
+				system(CLEAR);
+				page1_1();
+				puts("********** MENU **********");
+				puts("밥을 선택해주세요. ");
+				puts("1. 오므라이스 ------- 9,000원 ");
+				puts("2. 백반       ------- 10,000원");
+				puts("3. 볶음밥     ------- 9,500원");
+				puts("4. 카레라이스 ------- 10,500원");
+				puts("5. 비빔밥     ------- 11,000원");
+				puts("0. 주문 종료");
+				printf("메뉴 : [    ]\b\b\b\b");
+				scanf("%d", &menu_choice);
+
+				if (menu_choice == 0) break;
+
+				if (menu_choice >= 1 && menu_choice <= 5) {
+					if (rice_count >= 2) {
+						printf("\n배 터저요! 밥은 최대 2개까지 주문 가능합니다.\n");
+						system("pause");
+						continue;
+					}
+					rice_count++;
+
+					if (menu_choice == 1) {
+						printf(" ==> 오므라이스 추가\n");
+						total += 9000;
+						rice_qty[1]++;
+					}
+					else if (menu_choice == 2) {
+						printf(" ==> 백반 추가\n");
+						total += 10000;
+						rice_qty[2]++;
+					}
+					else if (menu_choice == 3) {
+						printf(" ==> 볶음밥 추가\n");
+						total += 9500;
+						rice_qty[3]++;
+					}
+					else if (menu_choice == 4) {
+						printf(" ==> 카레라이스 추가\n");
+						total += 10500;
+						rice_qty[4]++;
+					}
+					else if (menu_choice == 5) {
+						printf(" ==> 비빔밥 추가\n");
+						total += 11000;
+						rice_qty[5]++;
+					}
+				}
+				else printf("잘못된 번호입니다. 다시 선택해주세요.\n");
+
+				printf("현재 중간 합계 : %d원\n", total);
+				system("pause"); //일시정지 코드
+			}
+			break;
+
+		case 2:
+			while (1) {
+				system(CLEAR);
+				page1_1();
+				puts("********** MENU **********");
+				puts("국을 선택해주세요. ");
+				puts("1. 미역국     ------- 7,000원 ");
+				puts("2. 황태국     ------- 9,000원");
+				puts("3. 된장국     ------- 8,000원");
+				puts("4. 소고기무국 ------- 10,000원");
+				puts("5. 시래기국   ------- 9,500원");
+				puts("0. 주문 종료");
+				printf("메뉴 : [    ]\b\b\b\b");
+				scanf("%d", &menu_choice);
+
+				if (menu_choice == 0) break;
+
+				if (menu_choice >= 1 && menu_choice <= 5) {
+					if (soup_count >= 4) {
+						printf("\n배 터져요! 국은 최대 4개까지 주문 가능합니다.\n");
+						system("pause");
+						continue;
+					}
+					soup_count++;
+
+					if (menu_choice == 1) {
+						printf(" ==> 미역국 추가\n");
+						total += 7000;
+						soup_qty[1]++;
+					}
+					else if (menu_choice == 2) {
+						printf(" ==>  황태국 추가\n");
+						total += 9000;
+						soup_qty[2]++;
+					}
+					else if (menu_choice == 3) {
+						printf(" ==> 된장국 추가\n");
+						total += 8000;
+						soup_qty[3]++;
+					}
+					else if (menu_choice == 4) {
+						printf(" ==> 소고기무국 추가\n");
+						total += 10000;
+						soup_qty[4]++;
+					}
+					else if (menu_choice == 5) {
+						printf(" ==> 시래기국 추가\n");
+						total += 9500;
+						soup_qty[5]++;
+					}
+				}
+				else printf("잘못된 번호입니다. 다시 선택해주세요.\n");
+
+				printf("현재 중간 합계 : %d원\n", total);
+				system("pause"); //일시정지
+			}
+			break;
+
+		case 3:
+			while (1) {
+				system(CLEAR);
+				page1_1();
+				puts("********** MENU **********");
+				puts("반찬을 선택해주세요. (1~9번 모두 주문 시 20% 할인!)");
+				puts("1. 돈까스           ------- 10,000원");
+				puts("2. 멧돼지고기       ------- 12,000원");
+				puts("3. 두루치기         ------- 10,000원");
+				puts("4. 돼지고기 수육    ------- 10,000원");
+				puts("5. 소고기           ------- 12,500원");
+				puts("6. 달걀 프라이      ------- 3,000원");
+				puts("7. 오징어           ------- 5,000원");
+				puts("8. 콩나물           ------- 2,000원");
+				puts("9. 김치             ------- 2,000원");
+				puts("0. 주문 종료");
+				printf("메뉴 : [    ]\b\b\b\b");
+				scanf("%d", &menu_choice);
+
+				if (menu_choice == 0) break;
+
+				if (menu_choice >= 1 && menu_choice <= 9) {
+					side_dish_ckeck[menu_choice] = 1;
+					side_qty[menu_choice]++;
+
+					if (menu_choice == 1) {
+						printf(" ==> 돈까스 추가\n");
+						total += 10000;
+					}
+					else if (menu_choice == 2) {
+						printf(" ==>  멧돼지고기 추가\n");
+						total += 12000;
+					}
+					else if (menu_choice == 3) {
+						printf(" ==> 두루치기 추가\n");
+						total += 10000;
+					}
+					else if (menu_choice == 4) {
+						printf(" ==> 돼지고기 수육 추가\n");
+						total += 10000;
+					}
+					else if (menu_choice == 5) {
+						printf(" ==> 소고기 추가\n");
+						total += 12500;
+					}
+					else if (menu_choice == 6) {
+						printf(" ==> 달걀 프라이 추가\n");
+						total += 3000;
+					}
+					else if (menu_choice == 7) {
+						printf(" ==> 오징어 추가\n");
+						total += 5000;
+					}
+					else if (menu_choice == 8) {
+						printf(" ==> 콩나물 추가\n");
+						total += 2000;
+					}
+					else if (menu_choice == 9) {
+						printf(" ==> 김치 추가\n");
+						total += 2000;
+					}
+					else printf("잘못된 번호입니다. 다시 선택해주세요.\n");
+
+					printf("현재 중간 합계 : %d원\n", total);
+					system("pause");
+				}
+			}
+			break;
+
+		case 4:
+			printf("[성인인증]생년월일을 8자리를 입력하세요 (예 : 20050101) : ");
+			scanf("%d", &birthdate);
+
+			if (birthdate > 20071231) {
+				printf("\n[경고] 미성년자는 주류를 구매할 수 없습니다!\n");
+				break;
+			}
+
+			printf("\n[인증 성공] 주류 메뉴를 엽니다.\n");
+
+
+			while (1) {
+				system(CLEAR);
+				page1_1();
+				puts("********** MENU **********");
+				puts("술을 선택해주세요. ");
+				puts("1. 사케     ------- 8,000원");
+				puts("2. 생맥주   ------- 5,000원");
+				puts("3. 하이볼   ------- 4,000원");
+				puts("4. 소주     ------- 3,000원");
+				puts("5. 카스     ------- 3,500원");
+				puts("6. 하이트   ------- 4,000원");
+				puts("7. 소맥     ------- 6,000원");
+				puts("0. 주문 종료");
+				printf("메뉴 : [    ]\b\b\b\b");
+				scanf("%d", &menu_choice);
+
+				if (menu_choice == 0) break;
+
+				if (menu_choice == 1) {
+					printf(" ==> 사케 추가\n");
+					total += 8000;
+					drink_qty[1]++;
+				}
+				else if (menu_choice == 2) {
+					printf(" ==>  생맥주 추가\n");
+					total += 5000;
+					drink_qty[2]++;
+				}
+				else if (menu_choice == 3) {
+					printf(" ==> 하이볼 추가\n");
+					total += 4000;
+					drink_qty[3]++;
+				}
+				else if (menu_choice == 4) {
+					printf(" ==> 소주 추가\n");
+					total += 3000;
+					drink_qty[4]++;
+				}
+				else if (menu_choice == 5) {
+					printf(" ==> 카스 추가\n");
+					total += 3500;
+					drink_qty[5]++;
+				}
+				else if (menu_choice == 6) {
+					printf(" ==> 하이트 추가\n");
+					total += 4000;
+					drink_qty[6]++;
+				}
+				else if (menu_choice == 7) {
+					printf(" ==> 소맥 추가\n");
+					total += 6000;
+					drink_qty[7]++;
+				}
+				else printf("잘못된 번호입니다.다시 선택해주세요.\n");
+
+				printf("현재 중간 합계 : %d원\n", total);
+				system("pause");
+			}
+			break;
+		}
+	}
+	int all_side_dishes_ordered = 1;
+	for (int i = 1; i <= 9; i++) {
+		if (side_dish_ckeck[i] == 0) {
+			all_side_dishes_ordered = 0;
+			break;
+		}
+	}
+	printf("\n======================================\n");
+	if (all_side_dishes_ordered == 1) {
+		int discount = (int)(total * 0.2);
+		printf("\n 반찬 9종을 모두 선택하셨습니다! (20%% 할인 적용)");
+		printf("\n 원래 금액 : %d원", total);
+		printf("\n 할인 금액 : -%d원", discount);
+		total -= discount;
+	}
+	printf("\n 최종 결제 금액은 %d원입니다.\n", total);
+
+
+	int cache;			//스위치 함수
+	int card_num;		//카드 숫자 번호
+	int card_id;		//카드 범위
+	int final_total;	//최종 결제 현금 금액
+	int card_n;			//결제 선택
+	int cache_N;		//현금 가격(손님)
+
+	printf("\n======================================\n");
+	printf("결제를 선택해주세요.\n");
+	printf("1. 현금 (현금 결제는 10%% 할인입니다.)\n2. 카드\n");
+	printf("선택 : [   ]\b\b\b\b");
+	scanf("%d", &cache);
+	page1_1();
+
+	switch (cache)
+	{
+	case 1:
+		final_total = (int)(total * 0.9);
+		printf("\n[현금 결제] 10%%할인이 적용되었습니다.\n");
+		printf("\n10%%g할인이 적용된 금액입니다. %d원\n", final_total);
+		while (1)
+		{
+			printf("\n현금은 얼마인가요? : ");
+			if (scanf("%d", &cache_N) != 1)
+			{
+				while (getchar() != '\n');
+				continue;
+			}
+
+			if (cache_N < final_total) {
+				printf("\n[오류] 현금이 %d원 부족합니다. 다시 입력해 주세요\n", final_total - cache_N);
+
+			}
+			else
+			{
+				page1_1();
+				printf("\n결제가 완료되었습니다.\n");
+				printf("\n최종 결제 금액은 %d원\n", final_total);
+				printf("\n잔돈은 %d입니다.", cache_N - final_total);
+				printf("감사합니다\n");
+				return final_total;
+			}
+		}
+
+	case 2:
+		while (1) {
+			printf("\n카드 번호 4자리를 입력하세요 : ");
+			scanf("%d", &card_num);
+
+			card_id = card_num;
+
+			if (card_id >= 1000 && card_id < 2000) {
+				printf("[현대카드]가 맞으십니까?\n");
+			}
+			else if (card_id >= 2000 && card_id < 3000) {
+				printf("[삼성카드]가 맞으십니까?\n");
+			}
+			else if (card_id >= 3000 && card_id < 4000) {
+				printf("[신한카드]가 맞으십니까?\n");
+			}
+			else if (card_id >= 4000 && card_id < 5000) {
+				printf("[국민은행]가 맞으십니까?\n");
+			}
+			else {
+				printf("등록되지 않은 카드사입니다. 결제를 취소합니다.\n");
+				continue;
+			}
+
+
+			printf("1. 네 / 2. 아니요 : ");
+			scanf("%d", &card_n);
+
+			if (card_n == 1) {
+				page1_1();
+				printf("\n승인 중.... 잠시만 기다려주세요.\n");
+				printf("\n결제금액은 %d원이 결제되었습니다.\n", total);
+				printf("\n이용해주셔서 감사합니다.\n");
+				return total;
+			}
+			else {
+				printf("\n결제가 취소되었습니다. 다시 시도해주세요.\n");
+				continue;
+
+			}
+			break;
+		}
+	}
+	return total;
+}
+
+
+
+int main()
+{
+	int loop;
+	time_t start_time;
+	int total_sales = 0;
+	int customer_count = 0;
+
+	page1_1();
+	if (page1() == 1)
+	{
+		start_time = time(NULL);
+
+		page1_1();
+		printf("\n");
+		printf("\n안녕하세요.\n");
+		printf("\n상호명 : 정성한상\n\n");
+		system("pause");
+
+		for (int i = 0; i < 100; i++)
+		{
+			int sale = page2();
+			if (sale > 0) {
+				total_sales += sale;
+				customer_count++;
+			}
+
+			puts("\n작동을 종료할까요?\n");
+			printf("1. 네 / 2. 아니요 : ");
+			scanf("%d", &loop);
+
+			if (loop == 1)
+			{
+				printf("\n프로그램을 종료합니다.\n");
+				break;
+			}
+			else if (loop == 2)
+			{
+				printf("\n계속 주문을 진행합니다.\n");
+			}
+			else
+			{
+				printf("\n잘못된 입력입니다.\n");
+			}
+
+		}
+		time_t end_time = time(NULL);
+		int operating_time = (int)difftime(end_time, start_time);
+
+		int minutes = operating_time / 60;	//분
+		int seconds = operating_time % 60;	//초
+
+		printf("\n==========================================");
+		printf("\n오늘 영업 결과");
+		printf("\n운영 시간 : %d분 %d초", minutes, seconds);
+		printf("\n방문 손님 수 : %d명", customer_count);
+		printf("\n총 매출 : %d원", total_sales);
+		printf("\n==========================================");
+
+	}
+
+	return 0;
+}
