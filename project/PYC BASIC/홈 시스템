@@ -1,0 +1,106 @@
+# 프로젝트
+
+from pop import PiezoBuzzer, delay, Potentiometer, Switches, Cds, Leds, Sht20, Oled
+
+sht = Sht20()
+pm = Potentiometer()
+p = PiezoBuzzer()
+switches = Switches()
+cds_a = Cds()
+led = Leds()
+led.allOff()
+oled = Oled(automode=True)
+oled.init()
+oled.setTextSize(s=1)
+oled.clearDisplay()
+
+count1 = 0
+count2 = 0
+
+prev_sw1 = 1
+prev_sw2 = 1
+
+buzzer_played = False
+
+while True:
+    sw1 = switches[0].read()
+    sw2 = switches[1].read()
+    po = pm.readVolt()
+    temp_val = sht.readTemp()
+    humid_val = sht.readHumi()
+    cds_val = cds_a.read()
+
+    temp = str(round(temp_val, 2))
+    humid = str(round(humid_val, 2))
+    cds = str(round(cds_val, 2))
+
+    oled.clearDisplay()
+    oled.setCursor(10, 10)
+    oled.print("Temperature: " + temp)
+    oled.setCursor(10, 20)
+    oled.print("Humidity: " + humid)
+    oled.setCursor(10, 30)
+    oled.print("Cds: " + cds)
+    oled.display()
+
+    if prev_sw1 == 1 and sw1 == 0:
+        p.tone(5, 5, 4)
+
+        print(sw1)
+        count1 += 1
+        if count1 > 1:
+            count1 = 0
+        delay(50)
+    if count1 == 1:
+        if cds_val < 3000:
+            led[5].on()
+        else:
+            led[5].off()
+
+        if temp_val > 30:
+            led[4].on()
+        else:
+            led[4].off()
+
+        if temp_val > 32:
+            p.setTempo(120)
+            p.tone(5, 5, 4)
+            delay(100)
+
+        if humid_val > 50:
+            led[7].on()
+        else:
+            led[7].off()
+    elif count1 == 0:
+        for i in [4, 5, 7]:
+            led[i].off()
+
+    prev_sw1 = sw1
+
+    if prev_sw2 == 1 and sw2 == 0:
+        p.tone(5, 5, 4)
+
+        print(sw2)
+        count2 += 1
+        if count2 > 1:
+            count2 = 0
+        delay(50)
+    if count2 == 1:
+        count3 = max(0, 4 - int(po // 0.66))
+        if po <= 3.2:
+            buzzer_played = False
+        if po > 3.2 and not buzzer_played:
+            p.tone(5, 5, 4)
+            buzzer_played = True
+
+        for i in range(4):
+            if 4 - count3 > i:
+                led[i].on()
+            else:
+                led[i].off()
+    elif count2 == 0:
+        for i in [0, 1, 2, 3]:
+            led[i].off()
+
+    prev_sw2 = sw2
+    delay(50)
